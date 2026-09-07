@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gourmet Kaju Katri Website</title>
+    <style>
+        /* Base Styles */
+        :root {
+            --primary-color: #6d4c41; /* Dark Brown for text/accents */
+            --secondary-color: #8d6e63; /* Lighter Brown */
+            --accent-color: #ffd54f; /* Gold for highlighting */
+            --bg-color: #fffde7; /* Cream/off-white background */
+            --text-color: #333;
+            --box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+
+        h1, h2, h3 {
+            color: var(--primary-color);
+            margin-bottom: 0.5em;
+        }
+
+        p {
+            line-height: 1.6;
+            color: #555;
+            max-width: 700px;
+            margin: 0 auto 1.5em;
+        }
+
+        /* Loading Animation */
+        #loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--bg-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 1;
+            transition: opacity 1s ease, visibility 1s;
+        }
+
+        #loader .sweet-spinner {
+            border: 8px solid #f3f3f3; /* Light grey */
+            border-top: 8px solid var(--primary-color); /* Primary Color */
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 1.5s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        #loader.loaded {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        /* Header & Navigation */
+        header {
+            background-color: #fff;
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 900;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            text-decoration: none;
+        }
+
+        nav ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: var(--primary-color);
+        }
+
+        /* Hero Section */
+        #hero {
+            height: 90vh;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900"><rect fill="%23fffde7" width="1600" height="900"/><defs><pattern id="dots" patternUnits="userSpaceOnUse" width="40" height="40" patternTransform="rotate(45)"><circle cx="2" cy="2" r="2" fill="%23ffd54f" fill-opacity="0.1"/></pattern></defs><rect width="100%" height="100%" fill="url(%23dots)"/></svg>');
+            background-size: cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: var(--text-color);
+            position: relative;
+            padding: 0 20px;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            z-index: 2;
+            animation: slideInDown 1.2s ease;
+        }
+
+        #hero h1 {
+            font-size: 4rem;
+            margin-bottom: 0.2em;
+            color: #4a342a;
+        }
+
+        #hero p {
+            font-size: 1.4rem;
+            margin-bottom: 1.5em;
+            color: #666;
+        }
+
+        .btn-cta {
+            background-color: var(--primary-color);
+            color: #fff;
+            padding: 15px 40px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            text-decoration: none;
+            box-shadow: 0 5px 15px rgba(109, 76, 65, 0.4);
+            transition: background-color 0.3s, transform 0.2s, box-shadow 0.3s;
+        }
+
+        .btn-cta:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(109, 76, 65, 0.6);
+        }
+
+        /* Geometric Background Shapes (Diamond/Katris) */
+        .shape {
+            position: absolute;
+            background-color: rgba(212, 175, 55, 0.08); /* Faint gold */
+            transform: rotate(45deg);
+            z-index: 1;
+        }
+
+        .shape1 { width: 150px; height: 150px; top: 10%; left: 10%; animation: float 6s infinite ease-in-out; }
+        .shape2 { width: 250px; height: 250px; bottom: 15%; right: 5%; animation: float 8s infinite ease-in-out 1s; }
+        .shape3 { width: 100px; height: 100px; top: 50%; left: 70%; animation: float 5s infinite ease-in-out 0.5s; }
+
+        @keyframes float {
+            0%, 100% { transform: rotate(45deg) translate(0, 0); }
+            50% { transform: rotate(45deg) translate(20px, -20px); }
+        }
+
+        /* Sections General */
+        section {
+            padding: 80px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        section.centered {
+            text-align: center;
+        }
+
+        /* Products Section */
+        #products {
+            background-color: #fff;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .product-card {
+            background: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--box-shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            text-align: center;
+            border: 1px solid #eee;
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Placeholder image - Kaju Katri diamond shape */
+        .product-card .img-placeholder {
+            width: 100%;
+            height: 250px;
+            background-color: #f7f3e8; /* Light cream */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .product-card .img-placeholder::after {
+            content: '';
+            width: 100px;
+            height: 100px;
+            background-color: #e0e0e0;
+            transform: rotate(45deg); /* Diamond shape */
+        }
+
+        .product-info {
+            padding: 20px;
+        }
+
+        .product-info h3 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 1.4rem;
+        }
+
+        .product-info .price {
+            font-weight: bold;
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+        }
+
+        /* About Section */
+        #about {
+            background-color: #fafafa;
+            border-top: 1px solid #eee;
+            border-bottom: 1px solid #eee;
+        }
+
+        /* Contact Section */
+        #contact {
+            background-color: #fff;
+        }
+
+        #contact form {
+            max-width: 600px;
+            margin: 40px auto 0;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            text-align: left;
+        }
+
+        #contact input, #contact textarea {
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        #contact textarea {
+            resize: vertical;
+            height: 120px;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #4a342a;
+            color: #fffde7;
+            text-align: center;
+            padding: 40px 20px;
+            font-size: 0.9rem;
+        }
+
+        footer p {
+            color: #d7ccc8;
+            margin: 0;
+        }
+
+        /* Simple Enter Animations on Scroll (using JS class trigger) */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @keyframes slideInDown {
+            0% { opacity: 0; transform: translateY(-30px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsiveness */
+        @media (max-width: 768px) {
+            #hero h1 { font-size: 2.8rem; }
+            #hero p { font-size: 1.1rem; }
+            nav ul { flex-direction: column; gap: 0.5rem; text-align: center; padding: 10px; }
+            header { flex-direction: column; gap: 10px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Loading Animation -->
+<div id="loader">
+    <div class="sweet-spinner"></div>
+</div>
+
+<!-- Header -->
+<header>
+    <a href="#" class="logo">Kaju Bliss</a>
+    <nav>
+        <ul>
+            <li><a href="#hero">Home</a></li>
+            <li><a href="#products">Our Sweets</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#contact">Order Now</a></li>
+        </ul>
+    </nav>
+</header>
+
+<!-- Hero Section -->
+<section id="hero">
+    <div class="shape shape1"></div>
+    <div class="shape shape2"></div>
+    <div class="shape shape3"></div>
+    <div class="hero-content">
+        <h1>Authentic Kaju Katri</h1>
+        <p>Experience the melting moments of pure cashew perfection, handcrafted with tradition.</p>
+        <a href="#products" class="btn-cta">Explore Varieties</a>
+    </div>
+</section>
+
+<!-- Products Section -->
+<section id="products" class="centered">
+    <h2>Our Signature Collections</h2>
+    <p>From the classic silver-leafed beauty to modern takes, discover the variety that speaks to you.</p>
+
+    <div class="product-grid">
+        <!-- Product Card 1 -->
+        <div class="product-card reveal">
+            <div class="img-placeholder"></div> <!-- Placeholder for Classic image -->
+            <div class="product-info">
+                <h3>Classic Kaju Katri</h3>
+                <p>The timeless diamond shaped cashew sweet, finished with fine silver leaf.</p>
+                <div class="price">₹750 / kg</div>
+                <button class="btn-cta">Add to Box</button>
+            </div>
+        </div>
+
+        <!-- Product Card 2 -->
+        <div class="product-card reveal">
+            <div class="img-placeholder" style="background-color: #f7e8e8;"></div> <!-- Saffron colored placeholder -->
+            <div class="product-info">
+                <h3>Kesar Kaju Katri</h3>
+                <p>Infused with the finest strands of royal saffron for a rich, aromatic touch.</p>
+                <div class="price">₹850 / kg</div>
+                <button class="btn-cta">Add to Box</button>
+            </div>
+        </div>
+
+        <!-- Product Card 3 -->
+        <div class="product-card reveal">
+            <div class="img-placeholder" style="background-color: #e8f7e8;"></div> <!-- Pista colored placeholder -->
+            <div class="product-info">
+                <h3>Pista Kaju Katri</h3>
+                <p>Cashew goodness combined with the nutty delight of premium pistachios.</p>
+                <div class="price">₹820 / kg</div>
+                <button class="btn-cta">Add to Box</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- About Section -->
+<section id="about" class="centered reveal">
+    <h2>The Tradition of Quality</h2>
+    <p>Founded on a promise of purity, 'Kaju Bliss' brings you authentic Kaju Katri made using only the finest premium cashews, sugar, and traditional slow-cooking methods. Our sweets are free from preservatives and artificial colors, ensuring every bite is as wholesome as it is delicious.</p>
+</section>
+
+<!-- Contact/Order Section -->
+<section id="contact" class="centered reveal">
+    <h2>Place Your Order</h2>
+    <p>Want a box of happiness or have a custom requirement? Drop us a message.</p>
+    <form>
+        <input type="text" placeholder="Your Name" required>
+        <input type="email" placeholder="Your Email Address" required>
+        <input type="tel" placeholder="Phone Number">
+        <textarea placeholder="Your Message or Custom Order Details" required></textarea>
+        <button type="submit" class="btn-cta">Send Inquiry</button>
+    </form>
+</section>
+
+<!-- Footer -->
+<footer>
+    <p>&copy; 2023 Kaju Bliss Sweets. All Rights Reserved.</p>
+</footer>
+
+<script>
+    // 1. Loading Animation Fade Out
+    window.addEventListener('load', function() {
+        document.getElementById('loader').classList.add('loaded');
+    });
+
+    // 2. Scroll Animation Trigger
+    const reveals = document.querySelectorAll('.reveal');
+
+    function revealOnScroll() {
+        for (let i = 0; i < reveals.length; i++) {
+            let windowHeight = window.innerHeight;
+            let revealTop = reveals[i].getBoundingClientRect().top;
+            let revealPoint = 150; // Distance from bottom when animation starts
+
+            if (revealTop < windowHeight - revealPoint) {
+                reveals[i].classList.add('visible');
+            }
+        }
+    }
+
+    window.addEventListener('scroll', revealOnScroll);
+
+    // Run on initial load too, just in case some elements are already in view
+    revealOnScroll();
+</script>
+
+</body>
+</html>
